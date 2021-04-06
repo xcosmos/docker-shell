@@ -174,6 +174,13 @@ func completer(d prompt.Document) []prompt.Suggest {
 			return imagesSuggestion()
 		}
 
+		if command == "rmi" {
+			if len(suggestedImages) > 0 {
+				return suggestedImages
+			}
+			return imagesSuggestion()
+		}
+
 		if command == "pull" {
 			if strings.Index(word, ":") != -1 || strings.Index(word, "@") != -1 {
 				return []prompt.Suggest{}
