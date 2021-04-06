@@ -175,6 +175,18 @@ func completer(d prompt.Document) []prompt.Suggest {
 			return imagesSuggestion()
 		}
 
+		if command == "rm" {
+			if word == "-" {
+				if val, ok := shellCommands.IsDockerSubCommand(command); ok {
+					return prompt.FilterHasPrefix(val, word, true)
+				}
+			}
+			if len(suggestedImages) > 0 {
+				return suggestedImages
+			}
+			return containerListCompleter(true)
+		}
+
 		if command == "rmi" {
 			if word == "-" {
 				if val, ok := shellCommands.IsDockerSubCommand(command); ok {
