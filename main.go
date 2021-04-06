@@ -148,6 +148,7 @@ func completer(d prompt.Document) []prompt.Suggest {
 
 	group := getRegexGroups(d.Text)
 	if group != nil {
+
 		command := group["command"]
 
 		if command == "exec" || command == "stop" || command == "port" {
@@ -175,6 +176,11 @@ func completer(d prompt.Document) []prompt.Suggest {
 		}
 
 		if command == "rmi" {
+			if word == "-" {
+				if val, ok := shellCommands.IsDockerSubCommand(command); ok {
+					return prompt.FilterHasPrefix(val, word, true)
+				}
+			}
 			if len(suggestedImages) > 0 {
 				return suggestedImages
 			}
@@ -199,7 +205,6 @@ func completer(d prompt.Document) []prompt.Suggest {
 			return prompt.FilterHasPrefix(val, word, true)
 		}
 	}
-
 	return prompt.FilterHasPrefix(shellCommands.GetDockerSuggestions(), word, true)
 }
 
